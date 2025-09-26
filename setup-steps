@@ -1,0 +1,50 @@
+# Frontend Setup
+
+cd frontend
+npm install
+npm run start
+
+# Backend Setup
+
+    ## Mongo DB Setup:
+    1. Go to https://cloud.mongodb.com/atlas
+    2. Create a Project
+    3. Create a Free Cluster
+        - Choose free cluster
+        - Add a provider
+        - Add name for the cluster
+    4. Create a DB user
+        - Go to "Database Access" tab in left side > Add New DB User
+        - Chooose and set username and password
+        - set privlage > Atlas admin
+    5. Allow network access
+        - Go to "Network Access" tab in left side > Add IP address
+        - Add IP as "0.0.0.0/0" to allow access from anywhere
+    6. Get the connection string
+        - Cluster > Connect
+        - Copy the connection string  (replace <password> with the db user password)
+
+    ## Create a S3 Bucket
+
+    ## Save the IAM user "Access ID" & "Secret Access Key"
+
+    ## Streaming Service Setup
+        - inside the "streamingService" create a .env file and add the following
+            PORT=3002
+            AWS_KEY_ID='<ur-acces-id>'
+            AWS_SECRET_KEY='<ur-secret-key>'
+            AWS_REGION='ca-central-1'
+            AWS_S3_BUCKET='<ur-created-s3-bucket-name>'
+            MONGO_URI="<mongo-db-uri-string>"
+        - npm start
+
+    ## Auth Service Setup
+        - inside the "authService" create a .env file and add the following
+            PORT=3001
+            MONGO_URI="<mongo-db-uri-string>"
+            JWT_SECRET="writesomerandomsecrets"
+            AWS_KEY_ID='<ur-acces-id>'
+            AWS_SECRET_KEY='<ur-secret-key>'
+            AWS_REGION='ca-central-1'
+            AWS_S3_BUCKET='<ur-created-s3-bucket-name>'
+        - npm start

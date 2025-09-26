@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -7,18 +7,19 @@ import {
   Link,
   CircularProgress,
   Alert,
-} from '@mui/material';
-import { useAuth } from '../contexts/AuthContext';
-import { AuthContainer, FormContainer } from '../styles/auth.styles';
+} from "@mui/material";
+import { useAuth } from "../contexts/AuthContext";
+import { AuthContainer, FormContainer } from "../styles/auth.styles";
 
 export const Login = () => {
   const location = useLocation();
-  const [email, setEmail] = useState(location.state?.email || '');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [email, setEmail] = useState(location.state?.email || "");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.message) {
@@ -28,12 +29,12 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     // Basic validation
     if (!email || !password) {
-      setError('Please enter both email and password');
+      setError("Please enter both email and password");
       setLoading(false);
       return;
     }
@@ -42,9 +43,12 @@ export const Login = () => {
       const result = await login(email, password);
       if (!result.success) {
         setError(result.error);
+      } else {
+        login(result.user);
+        navigate("/browse");
       }
     } catch (err) {
-      setError('Failed to log in. Please try again.');
+      setError("Failed to log in. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -56,7 +60,11 @@ export const Login = () => {
         Sign In
       </Typography>
       {success && (
-        <Alert severity="success" sx={{ mt: 2, width: '100%' }} onClose={() => setSuccess('')}>
+        <Alert
+          severity="success"
+          sx={{ mt: 2, width: "100%" }}
+          onClose={() => setSuccess("")}
+        >
           {success}
         </Alert>
       )}
@@ -97,7 +105,7 @@ export const Login = () => {
           color="primary"
           disabled={loading}
         >
-          {loading ? <CircularProgress size={24} /> : 'Sign In'}
+          {loading ? <CircularProgress size={24} /> : "Sign In"}
         </Button>
         <Typography variant="body2" align="center" sx={{ mt: 2 }}>
           <Link component={RouterLink} to="/forgot-password">
@@ -105,7 +113,7 @@ export const Login = () => {
           </Link>
         </Typography>
         <Typography variant="body2" align="center">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <Link component={RouterLink} to="/register">
             Sign Up
           </Link>

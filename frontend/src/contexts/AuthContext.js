@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authService } from '../services/auth.service';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { authService } from "../services/auth.service";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error("Auth initialization error:", error);
         handleLogout();
       } finally {
         setLoading(false);
@@ -35,13 +35,14 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async (email, password) => {
     try {
       const data = await authService.login(email, password);
+      console.log("Submitting login:", email, password);
       setUser(data.user);
-      navigate('/browse');
+      navigate("/browse");
       return { success: true };
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Login failed'
+        error: error.response?.data?.message || "Login failed",
       };
     }
   };
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Registration failed'
+        error: error.response?.data?.message || "Registration failed",
       };
     }
   };
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Password reset request failed'
+        error: error.response?.data?.message || "Password reset request failed",
       };
     }
   };
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   const handleLogout = () => {
     authService.logout();
     setUser(null);
-    navigate('/login');
+    navigate("/login");
   };
 
   const value = {
@@ -90,17 +91,13 @@ export const AuthProvider = ({ children }) => {
     return <div>Loading...</div>; // You can replace this with a proper loading component
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
