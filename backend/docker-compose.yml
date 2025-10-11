@@ -1,0 +1,38 @@
+version: "1.1"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - .env
+    restart: always
+
+  auth-service:
+    build: ./authService
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      - ./authService/.env
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  streaming-service:
+    build: ./streamingService
+    container_name: streaming-service
+    ports:
+      - "3002:3002"
+    environment:
+      - ./streamingService/.env
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
