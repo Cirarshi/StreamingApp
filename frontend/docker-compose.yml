@@ -1,0 +1,16 @@
+version: "1.1"
+
+services:
+  web:
+    build: .
+    container_name: frontend-web
+    ports:
+      - "3000:3000"
+    command:
+      - npm start
+    restart: always
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+    depends_on:
+      - authService
+      - streamingService
