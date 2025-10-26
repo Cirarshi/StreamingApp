@@ -1,16 +1,23 @@
 version: "1.1"
 
 services:
-  web:
-    build: .
-    container_name: frontend-web
+  frontend:
+    image: streamfront:latest
     ports:
       - "3000:3000"
-    command:
-      - npm start
-    restart: always
-    environment:
-      - REACT_APP_API_URL=http://localhost:3000
     depends_on:
       - authService
       - streamingService
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+
+  backend:
+    image: streamstream:latest
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mongo
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+      - port = 3000
+      - MONGO_URI="mongodb+srv://utkarsh:Test%40123@streamingcluster.bw5rin1.mongodb.net/test"
